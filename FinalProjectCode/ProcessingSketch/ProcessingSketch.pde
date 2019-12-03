@@ -12,6 +12,9 @@ float angleY =0;
 float angleZ =0;
 boolean start;
 
+PShape AShape;
+
+
 /////////////////////////////////////////////////////////////////////////////
 
 // ball location
@@ -23,6 +26,7 @@ float rotz=0, rotx=0, roty=0;
 
 void setup() {
   size(800, 800, P3D);
+  AShape = loadShape("BodyMesh.obj");
   println(Serial.list());
   start = false;
 
@@ -76,7 +80,9 @@ void draw() {
   rectMode(CENTER);
   noStroke();
   fill(128);
-  sphere(20);
+  //sphere(20);
+  scale(20);
+  shape(AShape);
   popMatrix();
 
   if (start == true) {
