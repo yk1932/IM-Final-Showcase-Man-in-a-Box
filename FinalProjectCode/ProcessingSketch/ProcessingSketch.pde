@@ -20,15 +20,111 @@ PShape AShape;
 // ball location
 float x=0, y=0, z=0;
 // ball speeds
-float xs=0, ys=3, zs=0;
+float xs=10, ys=7, zs=4;
 // rotation of scene (viewpoint)
 float rotz=0, rotx=0, roty=0;
+
+
+
+class Ball{
+  PVector location;
+  PVector velocity;
+  PVector acceleration;
+  PVector GravitationalForce;
+  PVector NormalForce;
+  PVector ForceNet;  
+  int mass;
+  Ball(){
+    this.location = new PVector(0, 0, 0);
+    this.velocity = new PVector(2,0, 2);
+    //this.mass = 10;
+    this.acceleration = new PVector(0.8, 0.8, 0.8);
+    //this.GravitationalForce = new PVector(0, this.acceleration.y*this.mass);
+    //this.ForceNet = new PVector(0, 0);
+  }
+  
+  void display(){
+    sphere(20);
+  }
+  void checkBoundaries(){
+     if (this.location.y > 130){
+         this.velocity.y = this.velocity.y*-0.8;
+         this.location.y = 130;// why?
+         
+  }
+  if (this.location.x > 130){
+         this.velocity.x = this.velocity.x*-0.8;
+         this.location.x = 130;// why?
+         
+  }
+  if (this.location.z > 130 ){
+         this.velocity.z = this.velocity.z*-0.8;
+         this.location.z = 130;// why?
+         
+  }
+     if (this.location.y < -130 ){
+         this.velocity.y = this.velocity.y*-0.8;
+         this.location.y = -130;// why?
+         
+  }
+  if (this.location.x < -130 ){
+         this.velocity.x = this.velocity.x*-0.8;
+         this.location.x = -130;// why?
+         
+  }
+  if (this.location.z < -130){
+         this.velocity.z = this.velocity.z*-0.8;
+         this.location.z = -130;// why?
+         
+  }
+  }
+  
+  void update(){
+    this.location.add(this.velocity);
+    this.velocity.add(this.acceleration);
+  //  if (this.location.y > 130){
+  //       this.velocity.y = this.velocity.y*-0.8;
+  //       this.location.y = 130;// why?
+         
+  //}
+  //if (this.location.x > 130){
+  //       this.velocity.x = this.velocity.x*-0.8;
+  //       this.location.x = 130;// why?
+         
+  //}
+  //if (this.location.z > 130 ){
+  //       this.velocity.z = this.velocity.z*-0.8;
+  //       this.location.z = 130;// why?
+         
+  //}
+  //   if (this.location.y < -130 ){
+  //       this.velocity.y = this.velocity.y*-0.8;
+  //       this.location.y = -130;// why?
+         
+  //}
+  //if (this.location.x < -130 ){
+  //       this.velocity.x = this.velocity.x*-0.8;
+  //       this.location.x = -130;// why?
+         
+  //}
+  //if (this.location.z < -130){
+  //       this.velocity.z = this.velocity.z*-0.8;
+  //       this.location.z = -130;// why?
+         
+  //}
+
+}
+
+}
+
+
 
 void setup() {
   size(800, 800, P3D);
   AShape = loadShape("BodyMesh.obj");
   println(Serial.list());
   start = false;
+  ball = new Ball();
 
   // I know that the first port in the serial list on my Mac is always my FTDI
   // adaptor, so I open Serial.list()[0].
@@ -44,6 +140,8 @@ void keyPressed() {
     start = true;
   }
 }
+
+Ball ball;
 void draw() {
 
 
@@ -54,13 +152,15 @@ void draw() {
   background(0);
 
   // Make 0,0,0 center of scene, rotate all axises
-
+pushMatrix();
   translate(width/2, height/2, 0);
   pushMatrix();
+
   rotateX(angleX);
   rotateY(angleY);
   rotateZ(angleZ);
   lights();
+  
   directionalLight(128, 128, 128, 0, -1, -1);
 
 
@@ -71,47 +171,62 @@ void draw() {
   noFill();
   translate(0, 0, 0);
   box(300);
-  popMatrix();
+ 
+  //rect(0, 0, 260, 260);//debugging
+  //popMatrix();
 
   // Bouncing ball
-  pushMatrix();
+  //pushMatrix();
   rotateX(-PI/8);
-  translate(x, y, z);
-  rectMode(CENTER);
+  translate(ball.location.x, ball.location.y, z);
+  //rectMode(CENTER);
   noStroke();
   fill(128);
-  //sphere(20);
-  scale(20);
-  shape(AShape);
+  ball.display();
+  ;
+  ball.checkBoundaries();
+  //scale(20);
+  //shape(AShape);
+  popMatrix();
+ popMatrix();
+  pushMatrix();
+  ball.update();
   popMatrix();
 
   if (start == true) {
+    
+      
     //start =false;
 
     // Update ball position, bounce if reach box edge (box is -150 to 150, ball is 20)
     //pushMatrix();
-    x=x+xs;
-    if (x>130 || x<-130) {
-      x=x-xs;
-      xs=-xs;
-    }
+    //x=x+xs;
+    //if (x>130 || x<-130) { // if the x axis is hit
+    
+    //  x=x-xs;
+    //  xs=-xs;
+    //}
 
-    y=y+ys;
-    if (y>130 || y<-130) {
-      y=y-ys;
-      ys=-ys;
-    }
+    //y=y+ys;
+    //if (y>130 || y<-130) {
+    //  y=y-ys;
+    //  ys=-ys;
+    //}
 
-    z=z+zs;
-    if (z>130 || z<-130) {
-      z=z-zs;
-      zs=-zs;
-    }
+    //z=z+zs;
+    //if (z>130 || z<-130) {
+    //  z=z-zs;
+    //  zs=-zs;
+    //}
+    
+    
     //popMatrix();
 
     // Rotate scene
   } else {
   }
+  //popMatrix();
+
 }
 
 
@@ -205,6 +320,7 @@ void serialEvent(Serial myPort) {
       //println("Ask for more");
       // Reset serialCount:
       serialCount = 0;
+      delay(50);
     }
   }
 }
@@ -223,4 +339,3 @@ void calcAngles(float ax, float ay, float az) {
   angleY = yAngle;
   angleZ = zAngle;
 }
-
