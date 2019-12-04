@@ -44,17 +44,17 @@ void loop() {
         Y = int( map(y*100, -400, 400, 0, 255));
         Z = int(map(z*100, -400, 400, 0, 255));
 //        if (Serial.available() <= 0) {
-          Serial.print(X);
-        //                  Serial.print('\t');
-          Serial.print(Y);
-        //                  Serial.print('\t');
-          Serial.println(Z);
-          //Serial.write(X);
-//              Serial.print('\t');
-          //Serial.write(Y);
-                    //    Serial.print('\t');
-          //Serial.write(Z);
-//        }
+//          Serial.print(X);
+//        //                  Serial.print('\t');
+//          Serial.print(Y);
+//        //                  Serial.print('\t');
+//          Serial.println(Z);
+          Serial.write(X);
+              //Serial.print('\t');
+          Serial.write(Y);
+                      //  Serial.print('\t');
+          Serial.write(Z);
+////        }
 
         //                  Serial.print(int(X));
         //                  Serial.print('\t');
@@ -65,6 +65,7 @@ void loop() {
       }
     }
   }
+//  establishContact();
 }
 
 void establishContact() {
