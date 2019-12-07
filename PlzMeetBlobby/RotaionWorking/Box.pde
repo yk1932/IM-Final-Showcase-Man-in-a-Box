@@ -15,7 +15,7 @@ class Box {
     rotation =0;
     //STEP 1: Define Body
     BodyDef bd = new BodyDef();
-    bd.type = BodyType.KINEMATIC; 
+    bd.type = BodyType.STATIC; 
     bd.position.set(box2d.coordPixelsToWorld(x, y));
 
     //STEP 2: Create Body
@@ -104,11 +104,11 @@ class Box {
     
   }
   
-  void updateRotation(){
+  void updateRotation(float angle){
     body.destroyFixture(body.getFixtureList());
     //vertices=new Vec2[surface.size()];
     CreateShape();
-    rotation = rotation + 0.01;
+    rotation = angle;
     //if (rotation > 2*PI){
     //  rotation =0;
     //}
