@@ -118,8 +118,6 @@ class Ball{
 
 }
 
-
-
 void setup() {
   size(800, 800);
   AShape = loadShape("BodyMesh.obj");
