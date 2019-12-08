@@ -1,24 +1,29 @@
 class Blobby {
 
   Body body;
-  int w = 50;
-  int h = 50;
+  int w  = 30;
+  int h  = 30;
   int blobby_color1; 
   int blobby_color2; 
   int blobby_color3; 
   int eyeColor; 
   PImage blobby_img;
+  boolean anonymous;
+  boolean first_time = true;
 
   Blobby(int x, int y) {
+
+    
     eyeColor = int(random(2));
     blobby_color1 = int(random(255));
-    blobby_color2 = int(random(255));
-    blobby_color3 = int(random(255));
+    blobby_color2 = blobby_color1;
+    blobby_color3 = blobby_color1;
+    anonymous = false;
 
 
-      eyes_open = loadImage("black.png");
+      //eyes_open = loadImage("black.png");
     
-      eyes_closed = loadImage("untitled.png");
+      //eyes_closed = loadImage("untitled.png");
     
     //STEP 1: Define Body
     BodyDef bd = new BodyDef();
@@ -39,8 +44,8 @@ class Blobby {
     FixtureDef fd = new FixtureDef();
     fd.shape  = cs;
     fd.density = 100;
-    fd.friction = 0.3; 
-    fd.restitution = 0.3f;
+    fd.friction = 0; 
+    fd.restitution = 0.9f;
 
     //STEP5: attacj body to shape with fixture
     body.createFixture(fd);
@@ -59,6 +64,28 @@ class Blobby {
 
     // int randomColor;
     randomColor = int(random(255));
+  }
+  
+  void checkifAngry(){
+    Vec2 pos = box2d.getBodyPixelCoord(body);
+    if(dist(pos.x, pos.y, width/2, height/2)> 283){
+      anonymous = true;
+      body.setGravityScale(0);
+      //randomColor = int(random(255));
+      //this.blobby_color1 = randomColor
+      if (first_time){
+        first_time = false;
+      blobby_color1 = int(random(255));
+      blobby_color2 = int(random(255));
+      blobby_color3 = int(random(255));
+          w = int(random(30, 70));
+          h = w;
+      }
+      
+    }
+    //if (dist.pos.x)
+    
+    
   }
 
   void display(PImage eyes) {

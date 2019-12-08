@@ -26,7 +26,7 @@ class Boundary {
     body = box2d.createBody(bd);
      points = new ArrayList<Vec2>();
     //tempPoints = new ArrayList<Vec2>();
-    points.add(new Vec2(0, 0));
+   points.add(new Vec2(0, 0));
     points.add(new Vec2(width, 0));
     points.add(new Vec2(width, height));
     points.add(new Vec2(0, height));

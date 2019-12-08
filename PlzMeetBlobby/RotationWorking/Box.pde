@@ -2,16 +2,20 @@ class Box {
   
   Body body;
   float rotation;
-  int w = (43*height)/64; //width of the box
-  int h = (43*height)/64; //height of the box
+  int w = 400;
+  int h = 400;
   int x = width/2;
   int y = height/2;
   ArrayList<Vec2> points;
+ 
+  
   //ArrayList<Vec2> tempPoints;
   ChainShape surface;
     Vec2[] vertices;
     float[] rotations = {3*PI/4, PI/4, 7*PI/4, 5*PI/4, 3*PI/4 };
   Box(){
+    //NYUADimg = loadImage("mynyuad.png");
+     //NYUADimg.resize(300, 0);
     rotation =0;
     //STEP 1: Define Body
     BodyDef bd = new BodyDef();
@@ -28,19 +32,11 @@ class Box {
     //ps.setAsBox(box2Dw, box2Dh);
     points = new ArrayList<Vec2>();
     //tempPoints = new ArrayList<Vec2>();
-    
-    //points.add(new Vec2(width/6,height/6));
-    //points.add(new Vec2((5*width)/6,100));
-    //points.add(new Vec2((5*width)/6,(5*height)/6));
-    //points.add(new Vec2(width/6,(5*height)/6));
-    //points.add(new Vec2(width/6,height/6));
-    
-    points.add(new Vec2(width/4,height/4)); //left vertice
-    points.add(new Vec2((3*width)/4,100));
-    points.add(new Vec2((3*width)/4,(3*height)/4));
-    points.add(new Vec2(width/4,(3*height)/4));
-    points.add(new Vec2(width/4,height/4));
-    
+    points.add(new Vec2((width/2) - 200,(height/2) - 200));
+    points.add(new Vec2((width/2) + 200,(height/2) - 200));
+    points.add(new Vec2((width/2) + 200,(height/2) + 200));
+    points.add(new Vec2((width/2) - 200,(height/2) + 200));
+    points.add(new Vec2((width/2) - 200,(height/2) - 200));
     
     
     CreateShape();
@@ -60,16 +56,19 @@ class Box {
 
   void display(){
     Vec2 pos = box2d.getBodyPixelCoord(body);
-    float a = body.getAngle();
+    //float a = body.getAngle();
     
     
     pushMatrix();
     //print(pos.x, pos.y);
     translate(pos.x,pos.y);
     rotate(rotation);
-    fill(255);
-    //rectMode(CENTER);
+    fill(0);
+    stroke(0);
+    rectMode(CENTER);
     rect(0, 0, w, h);
+   
+    //image(NYUADimg, -150, -25);
     popMatrix();
     
   }
@@ -84,7 +83,7 @@ class Box {
     Vec2 radiusVector = points.get(0).sub(centVec);
     int count = 0;
     for (int i = 0; i < vertices.length ;i++ ){
-      //println(rotation);
+      println(rotation);
       
       //println(radiusVector.length());
       Vec2 tempVector = new Vec2(radiusVector.length()*(cos(rotations[count]+rotation)),radiusVector.length()*(sin(rotations[count]+rotation)));
@@ -111,6 +110,7 @@ class Box {
 
     
   }
+  
   
   void updateRotation(float angle){
     body.destroyFixture(body.getFixtureList());

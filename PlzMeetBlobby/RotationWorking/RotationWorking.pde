@@ -5,7 +5,8 @@ import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.joints.*;
 import processing.serial.*;
 int randomColor;
-
+int screenOne = 1;
+int screenTwo = 0; 
 Box2DProcessing box2d;
 
 Serial myPort;
@@ -19,21 +20,23 @@ float angleZ =0;
 boolean start;
 PImage eyes_open;
 PImage eyes_closed;
+//PImage NYUADimg;
+PImage eyes_angry ;
 
-
-
+boolean flag = true;
 
 ArrayList<Blobby> boxes;
 Blobby character;
+Boundary OuterBoundary;
 Box wall;
 void setup() {
   eyes_open = loadImage("black.png");
   eyes_closed = loadImage("untitled.png");
-
+  
   fullScreen();
   //size(600, 600);
-  //String portName = "COM6";
-  String portName = Serial.list()[1];
+  String portName = "COM6";
+  //String portName = Serial.list()[1];
   //println(Serial.list());
   myPort = new Serial(this, portName, 9600);
   myPort.buffer(3);
@@ -42,42 +45,95 @@ void setup() {
   box2d = new Box2DProcessing(this);
   box2d.createWorld(); 
   wall = new Box();
-  character =new Blobby(width/2, height/2); //display blobby at width/2 and height/2
+  character =new Blobby(width/2, height/2 - 50); //display blobby at width/2 and height/2
+  OuterBoundary = new Boundary();
 }
 
 
 void draw() {
-
+  //if (screenOne ==1){
+  //textSize();
+ 
   if (myPort.available() > 0) {
     //println("Available");
     serialEvent(myPort);
   }
   //add box2d world
   if (mousePressed) {
-
-    Blobby p = new Blobby(mouseX, mouseY);
-    boxes.add(p);
+    if (flag == true){
+      Blobby p = new Blobby(width/2, (height/2));
+      boxes.add(p);
+    }
   }
 
   box2d.step();
   background(0);
-  wall.display();
+  OuterBoundary.display();
+  if (screenOne ==1){
+  fill(255);
+  textSize(1500);
+
+   text(boxes.size(), 0, height );
+   wall.display();
+  }
+  else{
+    fill(255);
+  textSize(200);
+
+   text("You freed 99 \nblobbies, be the \n100th", 100, 300);
+    
+  }
+  
+  
   character.display(eyes_open);
 
   wall.updateRotation(angleX);
   for (Blobby b : boxes) {
     
     int pick_eyes = int(random(20));
-    if (pick_eyes == 0) {b.display(eyes_open);}
-    else if (pick_eyes == 1) {b.display(eyes_closed);}
+    if (pick_eyes == 0 ) {b.checkifAngry(); b.display(eyes_open);}
+    else if (pick_eyes == 1 ) { b.checkifAngry();b.display(eyes_closed);}
+    //else if (pick_eyes == 1) {b.display(eyes_closed);}
+    //else if (b.anonymous == true) {b.checkifAngry(); b.display(eyes_closed); }
     //else if (pick_eyes == 3) {b.display(eyes_closed);}
     //else if (pick_eyes == 5) {b.display(eyes_closed);}
     //else if (pick_eyes == 7) {b.display(eyes_closed);}
     //else if (pick_eyes == 10) {b.display(eyes_closed);}
     //else if (pick_eyes == 11) {b.display(eyes_closed);}
-    else {b.display(eyes_open);}
+    else {b.checkifAngry(); b.display(eyes_open);}
     
   }
+  if (boxes.size() >=  99){
+    flag = false;
+    for(Blobby blobby: boxes){
+      if(blobby.anonymous == false){
+        screenTwo = 0;
+        screenOne =1;
+        break;
+        
+      }
+      else{
+        screenTwo = 1;
+        screenOne =0;
+    
+      }
+      
+    }
+    
+   //box2d.destroyBody(OuterBoundary.body);
+   
+   //OuterBoundary = new Boundary();
+   //for(Blobby b : boxes){
+   //  if (b.anonymous == r){
+ 
+   //    break;
+   //  }
+    
+   //}
+  
+  }
+  //}
+  
 }
 
 int inByte;
