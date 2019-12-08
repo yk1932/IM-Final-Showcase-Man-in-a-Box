@@ -1,10 +1,10 @@
 import shiffman.box2d.*;
-PImage blobby_img;
 import org.jbox2d.collision.shapes.*;
 import org.jbox2d.common.*;
 import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.joints.*;
 import processing.serial.*;
+int randomColor;
 
 Box2DProcessing box2d;
 
@@ -17,6 +17,8 @@ float angleX =0;
 float angleY =0;
 float angleZ =0;
 boolean start;
+PImage eyes_open;
+PImage eyes_closed;
 
 
 
@@ -25,8 +27,9 @@ ArrayList<Blobby> boxes;
 Blobby character;
 Box wall;
 void setup() {
-  
-  
+  eyes_open = loadImage("black.png");
+  eyes_closed = loadImage("untitled.png");
+
   fullScreen();
   //size(600, 600);
   //String portName = "COM6";
@@ -59,11 +62,21 @@ void draw() {
   box2d.step();
   background(0);
   wall.display();
-  character.display();
+  character.display(eyes_open);
 
   wall.updateRotation(angleX);
   for (Blobby b : boxes) {
-    b.display();
+    
+    int pick_eyes = int(random(20));
+    if (pick_eyes == 0) {b.display(eyes_open);}
+    else if (pick_eyes == 1) {b.display(eyes_closed);}
+    //else if (pick_eyes == 3) {b.display(eyes_closed);}
+    //else if (pick_eyes == 5) {b.display(eyes_closed);}
+    //else if (pick_eyes == 7) {b.display(eyes_closed);}
+    //else if (pick_eyes == 10) {b.display(eyes_closed);}
+    //else if (pick_eyes == 11) {b.display(eyes_closed);}
+    else {b.display(eyes_open);}
+    
   }
 }
 
@@ -94,7 +107,7 @@ void serialEvent(Serial myPort) {
       Yrotation = serialInArray[1];
       Zrotation = serialInArray[2];
 
-      
+
       Xrotation = map(Xrotation, 0, 255, -400, 400);
       Yrotation = map(Yrotation, 0, 255, -400, 400);
       Zrotation = map(Zrotation, 0, 255, -400, 400);
