@@ -72,13 +72,19 @@ void draw() {
   if (screenOne ==1){
   fill(255);
   textSize(1500);
-
-   text(boxes.size(), 0, height );
+   if (boxes.size()+1<10){
+     text("0"+(boxes.size()+1), 0, height );
+     
+   }
+  else{
+   text(boxes.size()+1, 0, height );
+  }
    wall.display();
   }
   else{
     fill(255);
   textSize(200);
+  
 
    text("You freed 99 \nblobbies, be the \n100th", 100, 300);
     
@@ -103,7 +109,7 @@ void draw() {
     else {b.checkifAngry(); b.display(eyes_open);}
     
   }
-  if (boxes.size() >=  99){
+  if (boxes.size()+1 >=  99){
     flag = false;
     for(Blobby blobby: boxes){
       if(blobby.anonymous == false){
