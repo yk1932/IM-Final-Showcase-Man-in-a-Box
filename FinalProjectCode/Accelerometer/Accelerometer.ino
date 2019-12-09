@@ -16,7 +16,11 @@
 
 #include <Arduino_LSM9DS1.h>
 int inByte;
+int pushButton = 2;
+
+
 void setup() {
+  pinMode(pushButton, INPUT);
   Serial.begin(9600);
   while (!Serial);
 
@@ -29,8 +33,10 @@ void setup() {
 }
 float x, y, z;
 int X, Y, Z;
+int val;
 void loop() {
 
+  
   if (Serial.available() > 0) {
 
     inByte = Serial.read();
@@ -44,6 +50,8 @@ void loop() {
         Y = int( map(y*100, -400, 400, 0, 255));
         Z = int(map(z*100, -400, 400, 0, 255));
 //        if (Serial.available() <= 0) {
+        val = digitalRead(pushButton);  // read input value
+            
 //          Serial.print(X);
 //        //                  Serial.print('\t');
 //          Serial.print(Y);
@@ -54,6 +62,7 @@ void loop() {
           Serial.write(Y);
                       //  Serial.print('\t');
           Serial.write(Z);
+          Serial.write(val);
 ////        }
 
         //                  Serial.print(int(X));

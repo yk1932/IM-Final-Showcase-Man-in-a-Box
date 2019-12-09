@@ -73,7 +73,7 @@ class Boundary {
     
     
     pushMatrix();
-    print(pos.x, pos.y);
+    //print(pos.x, pos.y);
  
 
     fill(125);

@@ -83,7 +83,7 @@ class Box {
     Vec2 radiusVector = points.get(0).sub(centVec);
     int count = 0;
     for (int i = 0; i < vertices.length ;i++ ){
-      println(rotation);
+      //println(rotation);
       
       //println(radiusVector.length());
       Vec2 tempVector = new Vec2(radiusVector.length()*(cos(rotations[count]+rotation)),radiusVector.length()*(sin(rotations[count]+rotation)));

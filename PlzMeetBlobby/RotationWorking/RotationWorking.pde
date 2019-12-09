@@ -10,9 +10,9 @@ int screenTwo = 0;
 Box2DProcessing box2d;
 
 Serial myPort;
-int[] serialInArray = new int[3];    // Where we'll put what we receive
+int[] serialInArray = new int[4];    // Where we'll put what we receive
 int serialCount = 0;                 // A count of how many bytes we receive
-float Xrotation, Yrotation, Zrotation;                // Starting position of the ball
+float Xrotation, Yrotation, Zrotation, pushButton;                // Starting position of the ball
 boolean firstContact = false;        // Whether we've heard from the microcontroller
 float angleX =0;
 float angleY =0;
@@ -30,6 +30,7 @@ Blobby character;
 Boundary OuterBoundary;
 Box wall;
 void setup() {
+  pushButton = 0;
   eyes_open = loadImage("black.png");
   eyes_closed = loadImage("untitled.png");
   
@@ -39,7 +40,7 @@ void setup() {
   //String portName = Serial.list()[1];
   //println(Serial.list());
   myPort = new Serial(this, portName, 9600);
-  myPort.buffer(3);
+  myPort.buffer(4);
   boxes = new ArrayList<Blobby>();
   //character = 
   box2d = new Box2DProcessing(this);
@@ -50,16 +51,34 @@ void setup() {
 }
 
 
+
+void reset(){
+  for (Blobby delete : boxes){
+    box2d.destroyBody(delete.body);
+    screenOne = 1;
+    screenTwo =0;
+    flag = true;
+    
+  }
+  boxes.clear();
+}
+
 void draw() {
   //if (screenOne ==1){
   //textSize();
+  
+  if (mousePressed && screenTwo ==1){
+    reset();
+
+    
+  }
  
   if (myPort.available() > 0) {
     //println("Available");
     serialEvent(myPort);
   }
   //add box2d world
-  if (mousePressed) {
+  if (pushButton == 1.0 && screenOne == 1) {
     if (flag == true){
       Blobby p = new Blobby(width/2, (height/2));
       boxes.add(p);
@@ -164,10 +183,11 @@ void serialEvent(Serial myPort) {
     serialCount++;
 
     // If we have 3 bytes:
-    if (serialCount > 2 ) {
+    if (serialCount > 3 ) {
       Xrotation = serialInArray[0];
       Yrotation = serialInArray[1];
       Zrotation = serialInArray[2];
+     pushButton = serialInArray[3];
 
 
       Xrotation = map(Xrotation, 0, 255, -400, 400);
@@ -195,15 +215,15 @@ void serialEvent(Serial myPort) {
 
 void calcAngles(float ax, float ay, float az) {
   float xAngle = atan( ax / (sqrt((ay*ay) + (az*az))));
-  //float yAngle = atan( ay / (sqrt((ax*ax) + (az*az))));
-  //float zAngle = atan( sqrt((ax*ax) + (ay*ay)) / az);
+  float yAngle = atan( ay / (sqrt((ax*ax) + (az*az))));
+  float zAngle = atan( sqrt((ax*ax) + (ay*ay)) / az);
   //xAngle *= 180.00;   
   //yAngle *= 180.00;   
   //zAngle *= 180.00;
   //xAngle /= 3.141592; 
   //yAngle /= 3.141592; 
   //zAngle /= 3.141592;
-  angleX = xAngle;
+  angleX = (xAngle + yAngle+zAngle)/3;
   //angleY = yAngle;
   //angleZ = zAngle;
 }

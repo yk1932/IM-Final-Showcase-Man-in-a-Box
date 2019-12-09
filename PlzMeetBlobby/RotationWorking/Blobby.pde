@@ -99,7 +99,7 @@ class Blobby {
     //rectMode(CENTER);
 
     float a = body.getAngle();
-    print(blobby_img);
+    //print(blobby_img);
 
 
     pushMatrix();
