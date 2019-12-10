@@ -1,24 +1,26 @@
 class Blobby {
 
   Body body;
-  int w  = 30;
-  int h  = 30;
+  int w;
+  int h;
   int blobby_color1; 
   int blobby_color2; 
   int blobby_color3; 
   int eyeColor; 
   PImage blobby_img;
-  boolean anonymous;
+  boolean free;
   boolean first_time = true;
-
-  Blobby(int x, int y) {
-
+  int index; 
+  Blobby(int x, int y, int size) {
     
+
+    w = size;
+    h = size;
     eyeColor = int(random(2));
     blobby_color1 = int(random(255));
     blobby_color2 = blobby_color1;
     blobby_color3 = blobby_color1;
-    anonymous = false;
+    free = false;
 
 
       //eyes_open = loadImage("black.png");
@@ -66,10 +68,10 @@ class Blobby {
     randomColor = int(random(255));
   }
   
-  void checkifAngry(){
+  boolean checkifAngry(){
     Vec2 pos = box2d.getBodyPixelCoord(body);
     if(dist(pos.x, pos.y, width/2, height/2)> 283){
-      anonymous = true;
+      free = true;
       body.setGravityScale(0);
       //randomColor = int(random(255));
       //this.blobby_color1 = randomColor
@@ -80,9 +82,11 @@ class Blobby {
       blobby_color3 = int(random(255));
           w = int(random(30, 70));
           h = w;
+          return true;
       }
       
     }
+    return false; 
     //if (dist.pos.x)
     
     

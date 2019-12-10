@@ -5,8 +5,15 @@ import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.joints.*;
 import processing.serial.*;
 int randomColor;
-int screenOne = 1;
-int screenTwo = 0; 
+int screen = 1;
+int round = 0;
+int size =0;
+int beginGame = 0;
+int free = 0;
+int currentTime = 0;
+boolean GameOver = false;
+int NumberOfBlobbies = 1;
+
 Box2DProcessing box2d;
 
 Serial myPort;
@@ -22,18 +29,20 @@ PImage eyes_open;
 PImage eyes_closed;
 //PImage NYUADimg;
 PImage eyes_angry ;
+int timer = 30000;
+int startTime;
 
 boolean flag = true;
 
 ArrayList<Blobby> boxes;
-Blobby character;
+//Blobby character;
 Boundary OuterBoundary;
 Box wall;
 void setup() {
   pushButton = 0;
   eyes_open = loadImage("black.png");
   eyes_closed = loadImage("untitled.png");
-  
+
   fullScreen();
   //size(600, 600);
   String portName = "COM6";
@@ -46,120 +55,310 @@ void setup() {
   box2d = new Box2DProcessing(this);
   box2d.createWorld(); 
   wall = new Box();
-  character =new Blobby(width/2, height/2 - 50); //display blobby at width/2 and height/2
+  //character =new Blobby(width/2, height/2 - 50); //display blobby at width/2 and height/2
   OuterBoundary = new Boundary();
 }
 
 
 
-void reset(){
-  for (Blobby delete : boxes){
+void reset() {
+  for (Blobby delete : boxes) {
     box2d.destroyBody(delete.body);
-    screenOne = 1;
-    screenTwo =0;
+    //if (round ==3) {
+    //  screen = 3;
+    //}
+    //screen = 2;
     flag = true;
-    
   }
   boxes.clear();
+  startTime = millis();
+  t = 30;
 }
 
-void draw() {
-  //if (screenOne ==1){
-  //textSize();
-  
-  if (mousePressed && screenTwo ==1){
-    reset();
 
-    
+
+void hello() {
+
+  if (pushButton == 1.0) {
+
+    if (screen ==3) {
+      //reset();
+    } else if (screen ==1) {
+      screen = 4;
+      //screen = 2;
+      //println("screen and round", screen, round);
+      //beginGame = 1;
+      //reset();
+    } else if (screen ==4) {
+      delay(3000);
+      if (round ==0) {
+        fill(255);
+        textSize(200);
+        text("Round 1", 100, height/2);
+        textSize(100);
+        text("Shake the box and free the blobbies!!", 100, height*3/4);
+        //delay(2000);
+        //print("delay is happening");
+        screen = 2;
+
+        beginGame = 1;
+        reset();
+      } else  if (round ==1) {
+
+        fill(255);
+        textSize(200);
+        text("Round 2", 100, height/2);
+        textSize(100);
+        text("Bigger Blobbies, shake harder", 100, height*3/4);
+        screen = 2;
+
+        beginGame = 1;
+        reset();
+      } else  if (round ==2) {
+        fill(255);
+        textSize(200);
+        text("Round 3", 100, height/2);
+        textSize(100);
+        text("Eeeeeven Bigger, KEEP SHAKING", 100, height*3/4);
+        screen = 2;
+
+        beginGame = 1;
+        reset();
+      } else {
+        //println("FAIL ");
+      }
+    }
   }
- 
+}
+
+int t;
+//String time = "010";
+int interval = 10;
+
+
+
+void draw() {
+
+  if (mousePressed) {
+    if (screen ==3 || screen ==6) {
+      screen = 1;
+    }
+  }
+
+  //time = nf(t,2);
+
+
   if (myPort.available() > 0) {
     //println("Available");
     serialEvent(myPort);
   }
-  //add box2d world
-  if (pushButton == 1.0 && screenOne == 1) {
-    if (flag == true){
-      Blobby p = new Blobby(width/2, (height/2));
-      boxes.add(p);
-    }
-  }
+  hello();
 
-  box2d.step();
   background(0);
-  OuterBoundary.display();
-  if (screenOne ==1){
-  fill(255);
-  textSize(1500);
-   if (boxes.size()+1<10){
-     text("0"+(boxes.size()+1), 0, height );
-     
-   }
-  else{
-   text(boxes.size()+1, 0, height );
+
+  // if (mousePressed) {
+
+
+  //}
+
+
+
+  if (screen ==4) {
+    //reset(); 
+    //println("round and screen", round, screen);
+    if (round ==0) {
+      fill(255);
+      textSize(200);
+      text("Round 1", 100, height/2);
+      textSize(100);
+      text("Shake the box and free the blobbies!!", 100, height*3/4);
+      //delay(2000);
+      //print("delay is happening");
+      // screen = 2;
+      //beginGame = 1;
+      //reset();
+    } else  if (round ==1) {
+
+      fill(255);
+      textSize(200);
+      text("Round 2", 100, height/2);
+      textSize(100);
+      text("Bigger Blobbies, shake harder", 100, height*3/4);
+      //screen = 2;
+    } else  if (round ==2) {
+      fill(255);
+      textSize(200);
+      text("Round 3", 100, height/2);
+      textSize(100);
+      text("Eeeeeven Bigger, KEEP SHAKING", 100, height*3/4);
+    } else {
+      //println("FAIL ");
+    }
+    //delay(2000);
   }
-   wall.display();
-  }
-  else{
+
+  //if (screenOne ==1){
+  //textSize();
+  //To reset game
+
+  //To begin game 
+  //display the first screen
+  if (screen ==1) {
+    //background(0);
     fill(255);
-  textSize(200);
-  
+    textSize(200);
+    text("Free the blobbies!!", 100, height/2);
+  } else if (screen == 2) {
 
-   text("You freed 99 \nblobbies, be the \n100th", 100, 300);
-    
-  }
-  
-  
-  character.display(eyes_open);
+    //add box2d world
+    if (beginGame == 1 && screen == 2) {
 
-  wall.updateRotation(angleX);
-  for (Blobby b : boxes) {
-    
-    int pick_eyes = int(random(20));
-    if (pick_eyes == 0 ) {b.checkifAngry(); b.display(eyes_open);}
-    else if (pick_eyes == 1 ) { b.checkifAngry();b.display(eyes_closed);}
-    //else if (pick_eyes == 1) {b.display(eyes_closed);}
-    //else if (b.anonymous == true) {b.checkifAngry(); b.display(eyes_closed); }
-    //else if (pick_eyes == 3) {b.display(eyes_closed);}
-    //else if (pick_eyes == 5) {b.display(eyes_closed);}
-    //else if (pick_eyes == 7) {b.display(eyes_closed);}
-    //else if (pick_eyes == 10) {b.display(eyes_closed);}
-    //else if (pick_eyes == 11) {b.display(eyes_closed);}
-    else {b.checkifAngry(); b.display(eyes_open);}
-    
-  }
-  if (boxes.size()+1 >=  99){
-    flag = false;
-    for(Blobby blobby: boxes){
-      if(blobby.anonymous == false){
-        screenTwo = 0;
-        screenOne =1;
-        break;
-        
+
+      //beginGame = 0;
+
+      if (flag == true) {
+
+        if (round == 0) {
+          size = 30;
+        } else if (round ==1) {
+          size = 40;
+        } else if (round ==2) {
+          size = 60;
+        }
+        //for (int i = 0; i< 99; i++) {
+        Blobby p = new Blobby(width/2, (height/2), size);
+
+
+        boxes.add(p);
+        //println("Size", boxes.size());
+        //println("Screen", screen);
+
+        if (boxes.size() >=  NumberOfBlobbies) {
+          flag = false;
+        }
+        //}
       }
-      else{
-        screenTwo = 1;
-        screenOne =0;
-    
+    }
+    //
+    box2d.step();
+    background(0);
+
+
+    OuterBoundary.display();
+
+    //display for different screens
+    //fo screen 2
+    if (screen ==2  ) {
+
+      fill(255);
+      textSize(1500);
+      //t = interval - int(millis()/1000);
+      currentTime = millis();
+      //println("start and current",   currentTime - startTime);
+
+      if ( (currentTime - startTime)  > 1000 ) {
+        startTime = currentTime;
+        t = t-1;
+        GameOver = true;
+      }
+
+
+      if (t < 10) {
+        text("0"+(t), 0, height );
+      } else {
+        text(t, 0, height );
+      }
+      wall.display();
+
+      //display the blobbies
+      //update the angle of the black box
+      wall.updateRotation(angleX);
+
+      for (Blobby b : boxes) {
+
+        int pick_eyes = int(random(20));
+        if (pick_eyes == 0 ) {
+
+          b.display(eyes_open);
+        } else if (pick_eyes == 1 ) { 
+
+          b.display(eyes_closed);
+        }
+
+        b.display(eyes_open);
+        if (b.checkifAngry()) {
+          free = free + 1;
+          //print("ugh");
+        }
+      }
+      //if all the balls have been realeased
+
+
+      //for (Blobby blobby : boxes) {
+      if (free < NumberOfBlobbies && t < 0) {
+        screen = 3;
       }
       
+      if (free >=NumberOfBlobbies ) {
+        if (round >=2) {
+          reset();
+          screen = 6;
+          free = 0;
+        } else {
+
+          round = round + 1;
+          //interval = interval + 30;
+          screen = 4;
+          reset();
+          free = 0;
+        }
+      }
+      //free = 0;
+      //if (blobby.free == false) {
+      //  screen =2;
+      //  break;
+      //} else {
+      //  if (round == 3) {
+      //    screen = 3;
+      //  }
+      //  round =+1;
+      //  reset();
     }
+    //}
+    //for screen 3
+  } 
+  if (screen == 6){
+     fill(255);
+    textSize(200);
+    println("freed", free);
+    //if (free == NumberOfBlobbies) {
+      text("You freed \nall the \nblobbies!!!!", 400, height/4);
+    //} 
     
-   //box2d.destroyBody(OuterBoundary.body);
-   
-   //OuterBoundary = new Boundary();
-   //for(Blobby b : boxes){
-   //  if (b.anonymous == r){
- 
-   //    break;
-   //  }
-    
-   //}
-  
   }
-  //}
-  
+  if (screen ==3) {
+    print("hello");
+    fill(255);
+    textSize(200);
+    println("freed", free);
+    //if (free == NumberOfBlobbies) {
+    //  text("You freed all the blobbies!!!!", 400, height/2);
+    //} else {
+      //for (Blobby blob : boxes) {
+      //  blob.body.setGravityScale(10);
+      //}
+
+      //OuterBoundary.display();
+      text("Game Over", 100, height/2);
+    //}
+  }
 }
+
+
+
+//}
+//}
+
 
 int inByte;
 void serialEvent(Serial myPort) {
@@ -187,8 +386,8 @@ void serialEvent(Serial myPort) {
       Xrotation = serialInArray[0];
       Yrotation = serialInArray[1];
       Zrotation = serialInArray[2];
-     pushButton = serialInArray[3];
-
+      pushButton = serialInArray[3];
+      //print("PushButton",int(pushButton));
 
       Xrotation = map(Xrotation, 0, 255, -400, 400);
       Yrotation = map(Yrotation, 0, 255, -400, 400);

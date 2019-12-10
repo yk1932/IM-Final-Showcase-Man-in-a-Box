@@ -16,11 +16,11 @@
 
 #include <Arduino_LSM9DS1.h>
 int inByte;
-int pushButton = 2;
+int pressureSensor = A0;
 
-
+int pressureValue = 0;
 void setup() {
-  pinMode(pushButton, INPUT);
+//  pinMode(pushButton, INPUT);
   Serial.begin(9600);
   while (!Serial);
 
@@ -50,7 +50,8 @@ void loop() {
         Y = int( map(y*100, -400, 400, 0, 255));
         Z = int(map(z*100, -400, 400, 0, 255));
 //        if (Serial.available() <= 0) {
-        val = digitalRead(pushButton);  // read input value
+        pressureValue = analogRead(pressureSensor);
+        
             
 //          Serial.print(X);
 //        //                  Serial.print('\t');
@@ -62,7 +63,12 @@ void loop() {
           Serial.write(Y);
                       //  Serial.print('\t');
           Serial.write(Z);
-          Serial.write(val);
+          if (pressureValue < 200){
+            Serial.write((byte)0x0);
+          }
+          else{
+           Serial.write((byte)0x1);
+          }
 ////        }
 
         //                  Serial.print(int(X));
