@@ -63,11 +63,11 @@ void loop() {
           Serial.write(Y);
                       //  Serial.print('\t');
           Serial.write(Z);
-          if (pressureValue < 200){
-            Serial.write((byte)0x0);
+          if (pressureValue < 100){
+            Serial.write((byte)0x1);
           }
           else{
-           Serial.write((byte)0x1);
+           Serial.write((byte)0x0);
           }
 ////        }
 
