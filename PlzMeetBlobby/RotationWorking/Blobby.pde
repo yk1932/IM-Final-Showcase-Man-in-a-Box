@@ -80,8 +80,8 @@ class Blobby {
       blobby_color1 = int(random(255));
       blobby_color2 = int(random(255));
       blobby_color3 = int(random(255));
-          w = int(random(30, 70));
-          h = w;
+          w = int(random(100, 150));
+          h = int(random(50, 100));
           return true;
       }
       

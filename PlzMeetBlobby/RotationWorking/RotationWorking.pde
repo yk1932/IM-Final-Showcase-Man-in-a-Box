@@ -8,13 +8,15 @@ int randomColor;
 int screen = 1;
 int round = 0;
 int size =0;
+//int sizeh =0;
 int beginGame = 0;
 int free = 0;
 int currentTime = 0;
 boolean GameOver = false;
 int NumberOfBlobbies = 60;
 
-int GameBegin = 1;
+
+int GameBegin = 0;
 
 Box2DProcessing box2d;
 
@@ -77,26 +79,37 @@ void reset() {
   t = 30;
 }
 
+void keyPressed() {
+
+  if (key == ' ') {
+    if (screen == 1 && GameBegin !=0) {
+      screen = 4;
+    }
+    if (screen ==3 || screen ==6) {
+      screen = 1;
+    }
+  }
+}
 
 
 void hello() {
   if (pushButton ==0.0) {
-    if (screen == 1 && GameBegin ==0) {
-      screen = 4;
-    }
-     if (screen ==3 || screen ==6) {
-      screen = 1;
-    }
+    //if (screen == 1 && GameBegin !=0) {
+    //  screen = 4;
+    //}
+    // if (screen ==3 || screen ==6) {
+    //  screen = 1;
+    //}
     if (screen ==4) {
 
       if (round ==0) {
         fill(255);
         textSize(200);
-        text("Round 1", 100, height/2);
+        text("Round 1", 100, height/4);
         textSize(100);
-        text("Shake the box and free the blobbies!!", 100, height*3/4);
-         textSize(100);
-      text("Tap the bottom of the box to start", 100, height*5/6);
+        text("Shake the blobbies out of their boundaires!!", 100, height*2/4);
+        textSize(100);
+        text("Tap the bottom of the box to start", 100, height*3/4);
         //delay(2000);
         //print("delay is happening");
         screen = 2;
@@ -107,9 +120,11 @@ void hello() {
 
         fill(255);
         textSize(200);
-        text("Round 2", 100, height/2);
+        text("Round 2", 100, height/4);
         textSize(100);
-        text("Bigger Blobbies, shake harder", 100, height*3/4);
+        text("Bigger Blobbies, shake harder", 100, height*2/4);
+        textSize(100);
+        text("Tap the bottom of the box to start", 100, height*3/4);
         screen = 2;
 
         beginGame = 1;
@@ -117,9 +132,11 @@ void hello() {
       } else  if (round ==2) {
         fill(255);
         textSize(200);
-        text("Round 3", 100, height/2);
+        text("Round 3", 100, height/4);
         textSize(100);
-        text("Eeeeeven Bigger, KEEP SHAKING", 100, height*3/4);
+        text("Eeeeeven Bigger, KEEP SHAKING", 100, height*2/4);
+        textSize(100);
+        text("Tap the bottom of the box to start", 100, height*3/4);
         screen = 2;
 
         beginGame = 1;
@@ -127,7 +144,7 @@ void hello() {
       } else {
         //println("FAIL ");
       }
-      delay(3000);
+      //delay(3000);
     }
   }
 
@@ -136,9 +153,9 @@ void hello() {
     //if (screen ==3) {
     //  //reset();
     //} else 
-    if (screen ==1 && GameBegin == 1) {
+    if (screen ==1 && GameBegin == 0) {
       screen = 4;
-      GameBegin =0;
+      GameBegin =GameBegin +1;
       //pushButton = 0.0;
       //screen = 2;
       //println("screen and round", screen, round);
@@ -156,11 +173,11 @@ int interval = 10;
 
 void draw() {
 
-  if (mousePressed) {
-    //if (screen ==3 || screen ==6) {
-    //  screen = 1;
-    //}
-  }
+  //if (mousePressed) {
+  //  //if (screen ==3 || screen ==6) {
+  //  //  screen = 1;
+  //  //}
+  //}
 
   //time = nf(t,2);
 
@@ -186,9 +203,11 @@ void draw() {
     if (round ==0) {
       fill(255);
       textSize(200);
-      text("Round 1", 100, height/2);
+      text("Round 1", 100, height/4);
       textSize(100);
-      text("Shake the box and free the blobbies!!", 100, height*3/4);
+      text("Break our of your boundaires!!", 100, height*2/4);
+      textSize(100);
+      text("Tap the bottom of the box to start", 100, height*3/4);
       //delay(2000);
       //print("delay is happening");
       // screen = 2;
@@ -198,16 +217,20 @@ void draw() {
 
       fill(255);
       textSize(200);
-      text("Round 2", 100, height/2);
+      text("Round 2", 100, height/4);
       textSize(100);
-      text("Bigger Blobbies, shake harder", 100, height*3/4);
+      text("It's never the walls, it's you", 100, height*2/4);
+      textSize(100);
+      text("Tap the bottom of the box to start", 100, height*3/4);
       //screen = 2;
     } else  if (round ==2) {
       fill(255);
       textSize(200);
-      text("Round 3", 100, height/2);
+      text("Round 3", 100, height/4);
       textSize(100);
-      text("Eeeeeven Bigger, KEEP SHAKING", 100, height*3/4);
+      text("Keep Going", 100, height*2/4);
+      textSize(100);
+      text("Pick up the black box to start!", 100, height*3/4);
     } else {
       //println("FAIL ");
     }
@@ -226,13 +249,12 @@ void draw() {
     fill(255);
     textSize(200);
     text("Free the blobbies!!", 100, height/2);
-    if (GameBegin ==1) {
+    if (GameBegin ==0) {
       textSize(100);
       text("Pick up the black box to start!", 100, height*3/4);
-    }
-    else{
+    } else {
       textSize(100);
-      text("Tap the bottom of the box to start", 100, height*3/4);
+      text("Hit the spacebar", 100, height*3/4);
     }
   } else if (screen == 2) {
 
@@ -358,7 +380,9 @@ void draw() {
     textSize(200);
     println("freed", free);
     //if (free == NumberOfBlobbies) {
-    text("You freed \nall the \nblobbies!!!!", 400, height/4);
+    text("Congratulations!\nYou freed yourself!!!!", 400, height/4);
+    round = 0;
+    free = 0;
     //}
   }
   if (screen ==3) {
@@ -374,7 +398,9 @@ void draw() {
     //}
 
     //OuterBoundary.display();
-    text("Game Over", 100, height/2);
+    text("Game Over", 100, height/4);
+    textSize(100);
+    text((NumberOfBlobbies - free)+" blobbies\n have yet to be freed!!", 100, height*2/4);
     round = 0;
     free = 0;
     //}
