@@ -1,3 +1,5 @@
+float FRICTION_BOUNDARY = 0.6;
+int DENSITY_BOUNDARY = 1;
 class Boundary {
   
   Body body;
@@ -9,12 +11,7 @@ class Boundary {
   ChainShape surface;
   Vec2[] vertices;
   ArrayList<Vec2> points;
-
   BodyDef bd;
-
-
-  //ArrayList<Vec2> tempPoints;
-
  Boundary(){
     
     //STEP 1: Define Body
@@ -35,53 +32,28 @@ class Boundary {
     //STEP 3: Create Shape
     surface = new ChainShape();
     vertices = new Vec2[points.size()];
-    
-    //PolygonShape ps = new PolygonShape();
-    //float box2Dw = box2d.scalarPixelsToWorld(w/2);
-    //float box2Dh = box2d.scalarPixelsToWorld(h/2);
-    //ps.setAsBox(box2Dw, box2Dh);
+
     for (int i = 0; i < vertices.length ;i++ ){
-  
-      
-     //println(points.get(i));
-      //Vec2 newVec=new Vec2(tempVec.x,tempVec.y);
+
       vertices[i] = box2d.coordPixelsToWorld(points.get(i)); 
-      //verticess[i] = new Vec2(vertices[i].length()*(cos(rotation)),vertices[i].length()*(sin(rotation))); //comment
-      //println(verticess);
     }
-   
-    surface.createChain(vertices, vertices.length);
-    
-
-
+    surface.createChain(vertices, vertices.length);   
    // STEP 4: Create Fixture
     FixtureDef fd = new FixtureDef();
+    //properties of the outerboundary
     fd.shape  = surface;
-    fd.density = 1;
-    fd.friction = 0.6; 
-    //fd.setTransform(fd.Position, 10);
-    //fd.restitution = 0.5;
+    fd.density = DENSITY_BOUNDARY;
+    fd.friction = FRICTION_BOUNDARY; 
     //STEP5: attacj body to shape with fixture
     body.createFixture(fd);
-    body.setAngularVelocity(0.1);
 
   }
-
+//display the outerboundary of teh screen
   void display(){
     Vec2 pos = box2d.getBodyPixelCoord(body);
-    //float a = body.getAngle();
-    
-    
     pushMatrix();
-    //print(pos.x, pos.y);
- 
-
     fill(125);
-    //rectMode(CENTER);
     rect(pos.x, pos.y, w, h);
     popMatrix();
-    
-  }
-  
- 
+  } 
 }
